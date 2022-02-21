@@ -15,9 +15,15 @@ export default function Login() {
   // the URL to redirect to after logging in.
   const { from } = location.state || { from: { pathname: '/' } };
 
+  console.log(formState);
   const handleLogin = (event) => {
     event.preventDefault();
     const loginWasSuccessful = auth.login(formState.email, formState.password);
+    if (loginWasSuccessful) {
+      history.replace(from);
+    } else {
+      setError('SignIn not Successful');
+    }
 
     // TODO: If login was unsuccessful, set an error with a message
     // to display to the user that their login failed.
@@ -32,14 +38,16 @@ export default function Login() {
     <>
       <h3>You must log in to view the page at {from.pathname}</h3>
       <form onSubmit={handleLogin} className={styles.loginForm}>
-        <label>Email</label>
+        <label htmlFor="email">Email</label>
         <input
+          onChange={(e) => handleFormChange(e)}
           id="email"
           name="email"
           type="email"
         />{' '}
-        <label>Password</label>
+        <label htmlFor="password">Password</label>
         <input
+          onChange={(e) => handleFormChange(e)}
           id="password"
           name="password"
           type="password"
